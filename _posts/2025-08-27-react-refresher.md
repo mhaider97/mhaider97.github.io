@@ -74,6 +74,13 @@ UI snippet:
 ```
 
 ### Trending Movies with Appwrite
+
+To install the Appwrite SDK in your React project, simply add it as an npm module.
+
+```bash
+npm install appwrite
+```
+
 To interact with Appwrite, we use its SDK to create a client, which allows us to communicate with the database.
 
 ```js
@@ -122,12 +129,6 @@ export const getTrendingMovies = async () => {
     ]);
     return data.documents;
 }
-```
-
-To install the Appwrite SDK in your React project, simply add it as an npm module.
-
-```bash
-npm install appwrite
 ```
 
 ### External Links
