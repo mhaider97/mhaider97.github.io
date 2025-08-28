@@ -74,7 +74,61 @@ UI snippet:
 ```
 
 ### Trending Movies with Appwrite
-Every time a search succeeds, the first result is logged in **Appwrite**, and over time this builds a **Trending Movies** section.
+To interact with Appwrite, we use its SDK to create a client, which allows us to communicate with the database.
+
+```js
+const client = new Client()
+    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setProject(PROJECT_ID)
+
+const database = new Databases(client);
+```
+
+To enable trending movies, we maintain a search count for each unique search term in an Appwrite document. Whenever a user searches for a movie, we update the corresponding search count.
+
+```js
+export const updateSearchCount = async (searchTerm, movie) => {
+    try {
+        const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+            Query.equal('searchTerm', searchTerm),
+        ])
+
+        if (result.documents.length > 0) {
+            const doc = result.documents[0];
+            await database.updateDocument(DATABASE_ID, COLLECTION_ID, doc.$id, {
+                count: doc.count + 1,
+            })
+        } else {
+            await database.createDocument(DATABASE_ID, COLLECTION_ID, ID.unique(), {
+                searchTerm: searchTerm,
+                count: 1,
+                movie_id: movie.id,
+                poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+            })
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+```
+
+In the trending movies section, we can query these documents and retrieve them sorted by their search count.
+
+```js
+export const getTrendingMovies = async () => {
+    const data = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+        Query.limit(5),
+        Query.orderDesc('count'),
+    ]);
+    return data.documents;
+}
+```
+
+To install the Appwrite SDK in your React project, simply add it as an npm module.
+
+```bash
+npm install appwrite
+```
 
 ### External Links
 Each movie card links directly to its IMDB page in a new tab:
