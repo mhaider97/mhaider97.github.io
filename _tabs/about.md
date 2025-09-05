@@ -16,3 +16,5 @@ When I’m not coding, you’ll probably find me:
 - 🎤 Singing (I promise my code hits fewer bugs than my high notes 😅)
 
 This blog is where I share my projects, notes, and experiments as I learn in public. 🚀  
+
+👉 To learn more or get in touch, connect with me on [LinkedIn](https://www.linkedin.com/in/mohdhaiderdev)
